@@ -1,4 +1,4 @@
-
+import { createClient } from "@supabase/supabase-js";
 /**
  * PASO 1: DATOS PRIMITIVOS (Configuración base)
  * Definimos valores básicos con tipado explícito para que el compilador sepa 
@@ -218,8 +218,8 @@ const fetchCommentsByPost = async (postId: number): Promise<void> => {
  * PASO 1: CONFIGURACIÓN DE CONEXIÓN
  * Sustituye estos valores con los de tu proyecto en Supabase (Project Settings > API)
  */
-const SUPABASE_URL: string = "TU_URL_DE_SUPABASE";
-const SUPABASE_KEY: string = "TU_KEY";
+const SUPABASE_URL: string = "https://gobgynzwlktatkumfaeo.supabase.co";
+const SUPABASE_KEY: string = "sb_publishable_zPksRhbdVfEWWG8yiFokTg_yDwBcEN2";
 
 /**
  * PASO 2: INICIALIZACIÓN DEL CLIENTE
@@ -227,50 +227,48 @@ const SUPABASE_KEY: string = "TU_KEY";
  */
 
 // DESCOMENTAR LA LINEA DE ABAJO
-// const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /**
  * PASO 3: INTERFAZ DE DATOS
- * Definimos la estructura exacta de la tabla que vemos en tu imagen.
+ * Definimos la estructura para la tabla Lecciones
  */
-interface Auto {
-  id_auto: number;       // Columna ID (Primary Key)
-  patente: string;       // Columna Patente (Varchar)
-  id_propietario: number; // Columna ID Propietario (Foreign Key)
+interface Lecciones {
+  id_leccion: number;       // Columna ID (Primary Key)
+  titulo: string;       // Columna Titulo (Varchar)
+  orden: number; // Columna orden de la leccion (number)
 }
 
 /**
  * PASO 4: LA FUNCIÓN DE LECTURA (GET)
- * Esta función entra a la base de datos y trae los registros.
+ * Esta función entra a la base de datos y trae los registros de la tabla lecciones
  */
-const getAutos = async (): Promise<void> => {
+const getLecciones = async (): Promise<void> => {
   
   // Realizamos la consulta: 
-  // 1. .from('autos') -> Selecciona la tabla de tu imagen.
+  // 1. .from('lecciones') -> Selecciona la tabla Lecciones
   // 2. .select('*')   -> Pide todas las columnas de esa tabla.
 
   // DESCOMENTAR ESTAS LINEAS QUE SIGUEN
 
-  /*const { data, error } = await supabase
-    .from('autos')   
+  const { data, error } = await supabase
+    .from('lecciones')   
     .select('*');
 
   // Si Supabase responde con un error (ej: tabla inexistente o sin permisos RLS)
   if (error) {
-    console.error("❌ Error al obtener los autos:", error.message);
+    console.error("❌ Error al obtener las lecciones:", error.message);
     return;
   }
 
   // Si todo sale bien, 'data' contiene el array de objetos.
-  // Usamos 'as Auto[]' para decirle a TS que confíe en nuestra interfaz.
-  const listaAutos: Auto[] = data as Auto[];
+  // Usamos 'as Lecciones[]' para decirle a TS que confíe en nuestra interfaz.
+  const listaLecciones: Lecciones[] = data as Lecciones[];
 
   // Mostramos el resultado final en la consola del navegador
-  console.log("✅ Lista de autos recibida:");
-  console.table(listaAutos); 
-
-  HASTA AQUI DEBES DESCOMENTAR
-  */ 
+  console.log("✅ Lista de lecciones recibida:");
+  console.table(listaLecciones); 
+  
 };
 
 
@@ -290,7 +288,8 @@ const runLaboratory = async () => {
   await fetchSinglePost(POST_ID_TO_SEARCH); 
   await createNewPost();
   await fetchCommentsByPost(1);
-  //await getAutos();                
+  //await getAutos();  
+  await getLecciones();              
   
   console.log("%c --- EXPERIMENTO FINALIZADO ---", "background: #222; color: #bada55; padding: 5px;");
 };
