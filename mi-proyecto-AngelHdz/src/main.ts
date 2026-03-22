@@ -8,7 +8,7 @@ import { createClient } from '@supabase/supabase-js';
 const API_URL: string = "https://jsonplaceholder.typicode.com"; 
 
 // El ID que usaremos para las pruebas. Especificamos que es un número.
-const POST_ID_TO_SEARCH: number = 100; 
+const POST_ID_TO_SEARCH: number = 1; 
 
 // Un booleano para decidir si mostramos mensajes de log detallados.
 const IS_DEBUG_MODE: boolean = true; 
@@ -112,7 +112,13 @@ const createNewPost = async (): Promise<void> => {
  */
 // PISTA A: Crea la interfaz 'Comment'. 
 // Recuerda que la API devuelve: postId, id, name, email y body.
-
+interface Comment {
+  postId: number;
+  id: number;
+  name: string;
+  email: string;
+  body: string;
+}
 /**
  * PASO 7: FUNCIÓN DE BÚSQUEDA DE COMENTARIOS
  * Instrucciones:
@@ -129,30 +135,37 @@ const fetchCommentsByPost = async (postId: number): Promise<void> => {
   
   // 1. [LOG]: Imprime en consola un mensaje avisando que vas a buscar 
   // los comentarios del 'postId' recibido. Usa estilos %c si quieres.
+  console.log(`%c [Reto Lab] Se estarán buscando los comentarios del postId=${postId}.`, "color: green; font-weight: bold;")
 
   try {
     // 2. [PETICIÓN]: Crea una constante 'response'.
     // Usa 'fetch' con backticks para unir API_URL + /posts/ + postId + /comments.
-    
+    const response = await fetch(`${API_URL}/posts/${postId}/comments`);
 
     // 3. [VALIDACIÓN]: Si la respuesta (response.ok) es falsa, 
     // lanza un error (throw new Error) indicando que falló la carga.
-
+    if (!response.ok){
+      throw new Error (`Fallo de conexión con: ${response.status}`);
+    }
 
     // 4. [TRADUCCIÓN]: Crea una constante 'data'.
     // Usa 'await response.json()' y asígnale el tipo 'Comment[]' (Array de comentarios).
-    
+    const data: Comment[] = await response.json()
 
     // 5. [PROCESAMIENTO]: Una vez tengas los datos, imprime cuántos comentarios llegaron.
     // Tip: Usa data.length.
-
+    console.log(`%c Se han recibido ${data.length} comentarios en total.`, "color: orange; font-weight: bold;")
 
     // 6. [RECORRIDO]: Usa un método de array (como .forEach) para recorrer la lista.
     // Dentro, imprime solo el 'email' de cada comentario para verificar el tipado.
+    data.forEach((comment) => {
+      console.log(`%c - Email: ${comment.email}`, "color: brown; font-weight: bold;")
+    })
 
 
   } catch (error) {
     // 7. [ERRORES]: Captura el error y muéstralo con console.error.
+    console.error(`Algo mágico impide que haga mi trabajo: ${error}`)
   }
 };
 
@@ -248,7 +261,8 @@ const runLaboratory = async () => {
   
   // Usamos await para que los logs salgan en orden y no se mezclen.
   await fetchSinglePost(POST_ID_TO_SEARCH); 
-  await createNewPost();    
+  await createNewPost();  
+  await fetchCommentsByPost(POST_ID_TO_SEARCH);  
   //await getAutos();                
   
   console.log("%c --- EXPERIMENTO FINALIZADO ---", "background: #222; color: #bada55; padding: 5px;");
