@@ -220,7 +220,7 @@ interface Resenas {
 const getReview = async (): Promise<void> => {
   
   // Realizamos la consulta: 
-  // 1. .from('autos') -> Selecciona la tabla de tu imagen.
+  // 1. .from('resenas') -> Selecciona la tabla de tu imagen.
   // 2. .select('*')   -> Pide todas las columnas de esa tabla.
 
   // DESCOMENTAR ESTAS LINEAS QUE SIGUEN
@@ -236,7 +236,7 @@ const getReview = async (): Promise<void> => {
   }
 
   // Si todo sale bien, 'data' contiene el array de objetos.
-  // Usamos 'as Auto[]' para decirle a TS que confíe en nuestra interfaz.
+  // Usamos 'as Resenas[]' para decirle a TS que confíe en nuestra interfaz.
   const listaResenas: Resenas[] = data as Resenas[];
 
   // Mostramos el resultado final en la consola del navegador
