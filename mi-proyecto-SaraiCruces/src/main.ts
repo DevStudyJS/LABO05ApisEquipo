@@ -214,9 +214,10 @@ const SUPABASE_KEY: string = "sb_publishable_zPksRhbdVfEWWG8yiFokTg_yDwBcEN2";
  */
 interface cursos {
   id_curso: number;       // Columna ID (Primary Key)
-  titulo: string;       // Columna titulo (Varchar)
+  titulo: string;           //columna tiempo
+  duracion: number;    // Columna titulo (Varchar)
   id_usuario: number;    // Columna ID usuarios (Foreign Key)
-  duracion: number;     //columna tiempo
+   
 }
 
 /**
